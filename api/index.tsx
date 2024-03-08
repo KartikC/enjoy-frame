@@ -93,18 +93,35 @@ app.frame('/check', async (c) => {
     }
   }
 
+  const numOrbs = Math.floor(enjoyAmount);
+  const orbsArray = Array(numOrbs).fill(0);
+
+
   return c.res({
     image: (
-      <div style={{ 
-        backgroundImage: `url(https://enjoy-frame.vercel.app/enjoy.png)`,
-        backgroundSize: 'cover',
+      <div style={{
         display: 'flex',
-        color: 'blue',
-        backgroundPosition: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        backgroundColor: 'white',
+        color: 'blue',
+        fontSize: '24px',
+        textAlign: 'center'
       }}>
-        You have ${enjoyAmount} ENJOY tokens!
+        <div>You have {enjoyAmount} ENJOY tokens!</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          {orbsArray.map((_, index) => (
+            <img
+              key={index}
+              src="https://enjoy-frame.vercel.app/enjoy-orb.png"
+              alt="Enjoy Orb"
+              style={{ width: '50px', height: '50px', margin: '0 5px' }}
+            />
+          ))}
+        </div>
       </div>
     )
   })
