@@ -11,6 +11,10 @@ const fontUrl = './public/arial-narrow.ttf';
 export const app = new Frog({
   assetsPath: '/',
   basePath: '/api',
+  imageOptions: {
+    height: 500,
+    width: 955,
+  }
 });
 
 // export const app = new Frog({
