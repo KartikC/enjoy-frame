@@ -1,7 +1,6 @@
-import { Button, Frog, TextInput } from 'frog';
+import { Button, Frog } from 'frog';
 import { handle } from 'frog/vercel';
 import dotenv from 'dotenv';
-import { startImage, enjoyImage } from './public/images';
 
 dotenv.config({ path: '.env.local' });
 
@@ -34,7 +33,7 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
     accept: 'application/json',
     authorization: process.env.ZERION_AUTH_TOKEN || ''
   };
-  const ArialNarrowFont = '/arial-narrow.ttf';
+  //const ArialNarrowFont = '/arial-narrow.ttf';
 
   try {
     const response = await fetch(apiUrl, { headers: apiHeaders });
@@ -53,8 +52,24 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
   }
 }
 
-app.frame('/', async (c) => {
-  const { status, frameData } = c;
+// Starting frame, FID auto-captured
+app.frame('/', (c) => {
+  return c.res({
+    action: '/check',
+    image: (
+      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+        How much do I enjoy?!!!
+      </div>
+    ),
+    intents: [
+      <Button value="check">How much do you enjoy?!!!</Button>,
+    ]
+  })
+})
+
+// Frame to display user's enjoy holdings.
+app.frame('/check', async (c) => { 
+  const { status, frameData } = c
 
   let enjoyAmount = 0;
   if (status === 'response') {
@@ -66,49 +81,69 @@ app.frame('/', async (c) => {
 
   return c.res({
     image: (
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            status === 'response'
-              ? 'linear-gradient(to right, #432889, #17101F)'
-              : 'black',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            backgroundImage: `url(${startImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {status === 'response'
-            ? `You have ${enjoyAmount} ENJOY tokens!`
-            : 'Welcome!'}
-        </div>
+      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+        `You have ${enjoyAmount} ENJOY tokens!`
       </div>
-    ),
-    intents: [
-      <Button value="check">How much ENJOY?</Button>,
-    ],
-  });
-});
+    )
+  })
+})
+
+// app.frame('/', async (c) => {
+//   const { status, frameData } = c;
+//   let enjoyAmount = 0;
+//   if (status === 'response') {
+//     const address = await findAddressByFid(frameData?.fid?.toString());
+//     if (address) {
+//       enjoyAmount = await getEnjoyAmount(address);
+//     }
+//   }
+//   return c.res({
+//     image: (
+//       <div
+//         style={{
+//           alignItems: 'center',
+//           background:
+//             status === 'response'
+//               ? 'linear-gradient(to right, #432889, #17101F)'
+//               : 'black',
+//           backgroundSize: '100% 100%',
+//           display: 'flex',
+//           flexDirection: 'column',
+//           flexWrap: 'nowrap',
+//           height: '100%',
+//           justifyContent: 'center',
+//           textAlign: 'center',
+//           width: '100%',
+//         }}
+//       >
+//         <div
+//           style={{
+//             backgroundImage: `url(https://raw.githubusercontent.com/KartikC/enjoy-frame/main/public/start.png?token=GHSAT0AAAAAACLSSL46OPKM6O4CR3ZJ2H3AZPKMYPA)`,
+//             backgroundSize: 'cover',
+//             backgroundPosition: 'center',
+//             height: '100%',
+//             width: '100%',
+//             color: 'white',
+//             fontSize: 60,
+//             fontStyle: 'normal',
+//             letterSpacing: '-0.025em',
+//             lineHeight: 1.4,
+//             marginTop: 30,
+//             padding: '0 120px',
+//             whiteSpace: 'pre-wrap',
+//           }}
+//         >
+//           {status === 'response'
+//             ? `You have ${enjoyAmount} ENJOY tokens!`
+//             : 'Welcome!!'}
+//         </div>
+//       </div>
+//     ),
+//     intents: [
+//       <Button value="check">How much ENJOY?</Button>,
+//     ],
+//   });
+// });
 
 export const GET = handle(app);
 export const POST = handle(app);
