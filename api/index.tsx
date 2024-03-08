@@ -31,8 +31,7 @@ export const app = new Frog({
 async function findAddressByFid(fid: string | undefined) {
   // Make a request to the API
   const response = await fetch(
-   // `https://searchcaster.xyz/api/profiles?fid=${fid}`
-    `https://searchcaster.xyz/api/profiles?fid=639`
+   `https://searchcaster.xyz/api/profiles?fid=${fid}`
   );
   const data = await response.json();
   // Store the connectedAddress
@@ -162,7 +161,10 @@ app.frame('/check', async (c) => {
         ))}
       </div>
     </div>
-    )
+    ),
+    intents: [
+      <Button.Redirect location="https://swap.zora.energy/#/swap/0xa6B280B42CB0b7c4a4F789eC6cCC3a7609A1Bc39">Enjoy more!!!</Button.Redirect>,
+    ]
   })
 })
 
