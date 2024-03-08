@@ -87,8 +87,16 @@ app.frame('/check', async (c) => {
 
   return c.res({
     image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        `You have ${enjoyAmount} ENJOY tokens!`
+      <div style={{ 
+        backgroundImage: `url(https://enjoy-frame.vercel.app/enjoy.png)`,
+        backgroundSize: 'cover',
+        display: 'flex',
+        color: 'blue',
+        backgroundPosition: 'center',
+        width: '100%',
+        height: '100%'
+      }}>
+        You have ${enjoyAmount} ENJOY tokens!
       </div>
     )
   })
