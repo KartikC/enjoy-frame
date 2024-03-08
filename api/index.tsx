@@ -65,7 +65,7 @@ app.frame('/', (c) => {
         height: '100%'
       }}>
         <img 
-          src="https://enjoy-frame.vercel.app/start.png"
+          src="https://enjoy-frame.vercel.app/begin.png"
           alt="Start"
           style={{
             maxWidth: '100%',
