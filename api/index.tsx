@@ -8,25 +8,27 @@ dotenv.config({ path: '.env.local' });
 const fontUrl = './public/arial-narrow.ttf';
 
 
-// export const app = new Frog({
-//   assetsPath: '/',
-//   basePath: '/api',
-// });
-
 export const app = new Frog({
   assetsPath: '/',
   basePath: '/api',
-  imageOptions: {
-    fonts: [
-      {
-        name: 'Arial Narrow',
-        data: fs.readFileSync(fontUrl),
-        weight: 400,
-        style: 'normal',
-      },
-    ],
-  },
 });
+
+// export const app = new Frog({
+//   assetsPath: '/',
+//   basePath: '/api',
+//   imageOptions: {
+//     height: 500,
+//     width: 955,
+//     fonts: [
+//       {
+//         name: 'Arial Narrow',
+//         data: fs.readFileSync(fontUrl),
+//         weight: 400,
+//         style: 'normal',
+//       },
+//     ],
+//   },
+// });
 
 async function findAddressByFid(fid: string | undefined) {
   // Make a request to the API
