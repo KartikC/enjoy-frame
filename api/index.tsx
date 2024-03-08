@@ -78,7 +78,6 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
 
 // Starting frame, FID auto-captured
 app.frame('/', (c) => {
-  const timestamp = Date.now();
   return c.res({
     action: '/check',
     image: (
@@ -90,8 +89,8 @@ app.frame('/', (c) => {
         height: '100%'
       }}>
         <img 
-          src={`https://enjoy-frame.vercel.app/begin.png?t=${timestamp}`}
-          alt="Start"
+          src='https://enjoy-frame.vercel.app/begin.png'
+          alt='Start'
           style={{
             maxWidth: '100%',
             maxHeight: '100%',
