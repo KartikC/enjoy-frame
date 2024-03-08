@@ -24,6 +24,7 @@ async function findAddressByFid(fid: string | undefined) {
     console.error(error);
     return;
   }
+  console.log(`fid:${fid} > addr:${connectedAddress}`)
   return connectedAddress;
 }
 
@@ -38,7 +39,6 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
   try {
     const response = await fetch(apiUrl, { headers: apiHeaders });
     const data = await response.json();
-    console.log(data);
     if (data.data && data.data.length > 0) {
       const enjoyPosition = data.data[0];
       const enjoyAmount = parseFloat(enjoyPosition.attributes.quantity.numeric);
@@ -93,7 +93,7 @@ app.frame('/check', async (c) => {
     }
   }
 
-  const numOrbs = Math.floor(enjoyAmount);
+  const numOrbs = enjoyAmount.toString().split('.')[0].length;
   const orbsArray = Array(numOrbs).fill(0);
 
 
@@ -111,18 +111,38 @@ app.frame('/check', async (c) => {
         fontSize: '24px',
         textAlign: 'center'
       }}>
-        <div>You have {enjoyAmount} ENJOY tokens!</div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          {orbsArray.map((_, index) => (
-            <img
-              key={index}
-              src="https://enjoy-frame.vercel.app/enjoy-orb.png"
-              alt="Enjoy Orb"
-              style={{ width: '50px', height: '50px', margin: '0 5px' }}
-            />
-          ))}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '64px',
+          color: 'black',
+          textAlign: 'center'
+        }}>
+          <>
+            You have
+            <br />
+            {enjoyAmount < 1 ? (
+              <span style={{ color: '#5ac4fa' }}>NO :(</span>
+            ) : (
+              <span style={{ color: '#5ac4fa' }}>{Math.ceil(enjoyAmount).toLocaleString()}</span>
+            )}
+            <br />
+            ENJOY!!!
+          </>
         </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '30px' }}>
+        {orbsArray.map((_, index) => (
+          <img
+            key={index}
+            src="https://enjoy-frame.vercel.app/enjoy-orb.png"
+            alt="Enjoy Orb"
+            style={{ width: '50px', height: '50px', margin: '0 5px' }}
+          />
+        ))}
       </div>
+    </div>
     )
   })
 })
