@@ -1,9 +1,9 @@
 import { Button, Frog, TextInput } from 'frog';
 import { handle } from 'frog/vercel';
 import dotenv from 'dotenv';
+import { startImage, enjoyImage } from './public/images';
 
 dotenv.config({ path: '.env.local' });
-
 
 export const app = new Frog({
   assetsPath: '/',
@@ -34,6 +34,8 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
     accept: 'application/json',
     authorization: process.env.ZERION_AUTH_TOKEN || ''
   };
+  const ArialNarrowFont = '/arial-narrow.ttf';
+
   try {
     const response = await fetch(apiUrl, { headers: apiHeaders });
     const data = await response.json();
@@ -83,6 +85,9 @@ app.frame('/', async (c) => {
       >
         <div
           style={{
+            backgroundImage: `url(${startImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
             color: 'white',
             fontSize: 60,
             fontStyle: 'normal',
