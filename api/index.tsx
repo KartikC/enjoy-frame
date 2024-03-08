@@ -62,8 +62,8 @@ app.frame('/', (c) => {
         backgroundSize: 'cover',
         display: 'flex',
         backgroundPosition: 'center',
-        width: '100%',
-        height: '100%'
+        width: '500%',
+        height: '50%'
       }}>
       </div>
     ),
@@ -93,8 +93,8 @@ app.frame('/check', async (c) => {
         display: 'flex',
         color: 'blue',
         backgroundPosition: 'center',
-        width: '100%',
-        height: '100%'
+        width: '50%',
+        height: '50%'
       }}>
         You have ${enjoyAmount} ENJOY tokens!
       </div>
