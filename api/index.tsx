@@ -57,8 +57,14 @@ app.frame('/', (c) => {
   return c.res({
     action: '/check',
     image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        How much do I enjoy?!!!
+      <div style={{ 
+        backgroundImage: `url(https://enjoy-frame.vercel.app/start.png)`,
+        backgroundSize: 'cover',
+        display: 'flex',
+        backgroundPosition: 'center',
+        width: '100%',
+        height: '100%'
+      }}>
       </div>
     ),
     intents: [
