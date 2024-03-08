@@ -25,7 +25,6 @@ async function findAddressByFid(fid: string | undefined) {
     console.error(error);
     return;
   }
-  console.log(connectedAddress);
   return connectedAddress;
 }
 
@@ -35,7 +34,6 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
     accept: 'application/json',
     authorization: process.env.ZERION_AUTH_TOKEN || ''
   };
-  console.log(process.env);
   try {
     const response = await fetch(apiUrl, { headers: apiHeaders });
     const data = await response.json();
@@ -55,7 +53,6 @@ async function getEnjoyAmount(walletAddress: string): Promise<number> {
 
 app.frame('/', async (c) => {
   const { status, frameData } = c;
-  console.log(frameData?.fid);
 
   let enjoyAmount = 0;
   if (status === 'response') {
