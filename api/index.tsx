@@ -1,22 +1,70 @@
-import { Button, Frog, TextInput } from 'frog'
-// import { neynar } from 'frog/hubs'
-import { handle } from 'frog/vercel'
+import { Button, Frog, TextInput } from 'frog';
+import { handle } from 'frog/vercel';
+import dotenv from 'dotenv';
 
-// Uncomment to use Edge Runtime.
-// export const config = {
-//   runtime: 'edge',
-// }
+dotenv.config({ path: '.env.local' });
+
 
 export const app = new Frog({
   assetsPath: '/',
   basePath: '/api',
-  // Supply a Hub to enable frame verification.
-  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
-})
+});
 
-app.frame('/', (c) => {
-  const { buttonValue, inputText, status } = c
-  const fruit = inputText || buttonValue
+async function findAddressByFid(fid: string | undefined) {
+  // Make a request to the API
+  const response = await fetch(
+   // `https://searchcaster.xyz/api/profiles?fid=${fid}`
+    `https://searchcaster.xyz/api/profiles?fid=639`
+  );
+  const data = await response.json();
+  // Store the connectedAddress
+  let connectedAddress = null;
+  try {
+    connectedAddress = data[0].connectedAddress;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+  console.log(connectedAddress);
+  return connectedAddress;
+}
+
+async function getEnjoyAmount(walletAddress: string): Promise<number> {
+  const apiUrl = `https://api.zerion.io/v1/wallets/${walletAddress}/positions/?filter[positions]=only_simple&currency=usd&filter[chain_ids]=zora&filter[fungible_ids]=6a10facc-80b7-4f52-9532-ea589091d03a&filter[trash]=only_non_trash&sort=value`;
+  const apiHeaders = {
+    accept: 'application/json',
+    authorization: process.env.ZERION_AUTH_TOKEN || ''
+  };
+  console.log(process.env);
+  try {
+    const response = await fetch(apiUrl, { headers: apiHeaders });
+    const data = await response.json();
+    console.log(data);
+    if (data.data && data.data.length > 0) {
+      const enjoyPosition = data.data[0];
+      const enjoyAmount = parseFloat(enjoyPosition.attributes.quantity.numeric);
+      return enjoyAmount;
+    } else {
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error fetching Enjoy amount:', error);
+    return 0;
+  }
+}
+
+app.frame('/', async (c) => {
+  const { status, frameData } = c;
+  console.log(frameData?.fid);
+
+  let enjoyAmount = 0;
+  if (status === 'response') {
+    const address = await findAddressByFid(frameData?.fid?.toString());
+    if (address) {
+      enjoyAmount = await getEnjoyAmount(address);
+    }
+  }
+
   return c.res({
     image: (
       <div
@@ -49,20 +97,16 @@ app.frame('/', (c) => {
           }}
         >
           {status === 'response'
-            ? `Nice choice.${fruit ? ` ${fruit.toUpperCase()}!!` : ''}`
+            ? `You have ${enjoyAmount} ENJOY tokens!`
             : 'Welcome!'}
         </div>
       </div>
     ),
     intents: [
-      <TextInput placeholder="Enter custom fruit..." />,
-      <Button value="apples">Apples</Button>,
-      <Button value="oranges">Oranges</Button>,
-      <Button value="bananas">Bananas</Button>,
-      status === 'response' && <Button.Reset>Reset</Button.Reset>,
+      <Button value="check">How much ENJOY?</Button>,
     ],
-  })
-})
+  });
+});
 
-export const GET = handle(app)
-export const POST = handle(app)
+export const GET = handle(app);
+export const POST = handle(app);
