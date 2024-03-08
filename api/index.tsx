@@ -1,11 +1,11 @@
 import { Button, Frog } from 'frog';
 import { handle } from 'frog/vercel';
 import dotenv from 'dotenv';
-import fs from 'fs';
+//import fs from 'fs';
 
 dotenv.config({ path: '.env.local' });
 
-const fontUrl = './public/arial-narrow.ttf';
+//const fontUrl = './public/arial-narrow.ttf';
 
 
 export const app = new Frog({
